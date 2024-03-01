@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>It's Almost</title>
+  <link rel="stylesheet" href="./countdown.css">
+  <style>
+    .countdown-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: omnes-pro, sans-serif;
+      font-size: 40px;
+      font-weight: 500;
+      color: #5e7072;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="container">
+      <div class="top-section">
+        <div>
+          <input class="title-box" type="textbox" id="countdownmsg" placeholder="It's almost too good to be true">
+        </div>
+        <div class="errormsg">
+          <p id="errormsg_countdown"></p>
+        </div>
+      </div>
+      <br>
+      <div class="middle-section">
+        <div class="input-wrap">
+          <label class="label-text">on</label>
+          <input class="date-time-input" id="dateInput" type="date">
+          <label class="label-text">at</label>
+          <input class="date-time-input" id="timeInput" type="time">
+        </div>
+        <div class="errormsg">
+          <p id="errormsg_dateTime"></p>
+        </div>
+      </div>
+      <br>
+      <div class="bottom-section">
+        <button class="countdown-button" onclick="startCountdown();">Create Free Countdown</button>
+      </div>
+    </div>
+  </main>
+
+  <button onclick="goBack();">BACK</button>
+
+  <div class="countdown-wrap">
+    <p id="countdownMsg" class="countdown-msg"></p>
+    <p id="countdown" class="countdown-timer"></p>
+  </div>
+
+  <script>
+    const d = new Date();
+
+    function dateInput() {
+      const date = d.getDate().toString().padStart(2, '0');
+      const year = d.getFullYear();
+      let month = (d.getMonth() + 1).toString().padStart(2, '0');
+
+      let fullDate = `${year}-${month}-${date}`;
+      document.getElementById('dateInput').value = fullDate;
+    }
+
+    dateInput();
+
+    function timeInput() {
+      const oneHourBefore = new Date(d.getTime() + (1 * 60 * 60 * 1000));
+      const hours = oneHourBefore.getHours().toString().padStart(2, '0');
+      const minutes = oneHourBefore.getMinutes().toString().padStart(2, '0');
+      const formattedTime = `${hours}:${minutes}`;
+
+      document.getElementById('timeInput').value = formattedTime;
+    }
+
+    timeInput();
+
+    function startCountdown() {
+      const time = document.getElementById('timeInput').value;
+      const date = document.getElementById('dateInput').value;
+      const targetDateTime = `${date}T${time}`;
+
+      const countdownMsg = document.getElementById('countdownmsg').value;
+      const isValid = validateDateTime(date, time);
+
+      if (!countdownMsg || !isValid) {
+        errorMsg(countdownMsg, isValid);
+      } else {
+        hideErrorMsg();
+        redirectNewPage(targetDateTime);
+      }
+    }
+
+    function validateDateTime(date, time) {
+      if (!date || !time) {
+        return false;
+      }
+
+      const targetDateTime = new Date(`${date}T${time}`);
+      const currentDateTime = new Date();
+
+      if (targetDateTime <= currentDateTime) {
+        return false;
+      }
+      return true;
+    }
+
+    function errorMsg(countdownMsg, isValid) {
+      if (!countdownMsg) {
+        document.getElementById('errormsg_countdown').innerHTML = '**This is required';
+      } else {
+        document.getElementById('errormsg_countdown').innerHTML = '';
+      }
+
+      if (!isValid) {
+        document.getElementById('errormsg_dateTime').innerHTML = '**Time only moves forward. Please try again';
+      } else {
+        document.getElementById('errormsg_dateTime').innerHTML = '';
+      }
+    }
+
+    function hideErrorMsg() {
+      document.getElementById('errormsg_countdown').innerHTML = '';
+      document.getElementById('errormsg_dateTime').innerHTML = '';
+    }
+
+    function redirectNewPage(dateTime) {
+      const countdownMsg = document.getElementById('countdownmsg').value;
+      window.location.href = `countdown-next.html?targetDateTime=${(dateTime)}&countdownMsg=${(countdownMsg)}`;
+    }
+
+    document.getElementById('countdownmsg').addEventListener('keyup', function (event) {
+      const countdownMsg = document.getElementById('countdownmsg').value;
+      if (countdownMsg) {
+        hideErrorMsg();
+      } else {
+        errorMsg(countdownMsg, true);
+      }
+    });
+
+    document.getElementById('timeInput').addEventListener('keyup', function () {
+      const time = document.getElementById('timeInput').value;
+      const date = document.getElementById('dateInput').value;
+      const countdownMsg = document.getElementById('countdownmsg').value;
+      const isValid = validateDateTime(date, time);
+
+      if (isValid) {
+        hideErrorMsg();
+      } else {
+        errorMsg("a", isValid);
+      }
+    });
+
+    document.getElementById('dateInput').addEventListener('keyup', function () {
+      const time = document.getElementById('timeInput').value;
+      const date = document.getElementById('dateInput').value;
+      const countdownMsg = document.getElementById('countdownmsg').value;
+      const isValid = validateDateTime(date, time);
+
+      if (isValid) {
+        hideErrorMsg();
+      } else {
+        errorMsg("a", isValid);
+      }
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+</body>
+
+</html>
