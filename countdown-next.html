@@ -17,6 +17,24 @@
     font-weight: 500;
     color: #5e7072;
   }
+
+  #countdownMsg #countdown {
+    font-size: 100px;
+    margin-top: 20px;
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 768px) {
+    .countdown-wrap {
+      font-size: 24px;
+    }
+
+    @media screen and (max-width: 576px) {
+      .countdown-wrap {
+        font-size: 18px;
+      }
+    }
+  }
 </style>
 
 <body>
@@ -55,14 +73,16 @@
 
       if (days > 0) {
         countdownText += `${days}days `;
-      } else if (hours > 0) {
+      } else if (hours > 0 || days > 0) {
         countdownText += `${hours}hours `;
-      } else if (minutes > 0) {
+      } else if (minutes > 0 || hours > 0 || days > 0) {
         countdownText += `${minutes} minutes `;
       }
       countdownText += `${seconds} seconds `;
 
+      countdownText = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
       document.getElementById('countdown').innerHTML = countdownText;
+
 
       if (remainingTime <= 0) {
         clearInterval(countdown);

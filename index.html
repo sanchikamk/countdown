@@ -1,25 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>It's Almost</title>
-  <link rel="stylesheet" href="./countdown.css">
-  <style>
-    .countdown-wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      font-family: omnes-pro, sans-serif;
-      font-size: 40px;
-      font-weight: 500;
-      color: #5e7072;
-    }
-  </style>
 </head>
+
+<link rel="stylesheet" href="styles/countdown.css">
 
 <body>
   <main>
@@ -46,25 +32,22 @@
       </div>
       <br>
       <div class="bottom-section">
-        <button class="countdown-button" onclick="startCountdown();">Create Free Countdown</button>
+        <button class="countdown-button" onclick="
+        startCountdown();
+       ">Create Free Countdown</button>
       </div>
     </div>
   </main>
-
-  <button onclick="goBack();">BACK</button>
-
-  <div class="countdown-wrap">
-    <p id="countdownMsg" class="countdown-msg"></p>
-    <p id="countdown" class="countdown-timer"></p>
-  </div>
-
   <script>
+
     const d = new Date();
 
     function dateInput() {
+
       const date = d.getDate().toString().padStart(2, '0');
       const year = d.getFullYear();
       let month = (d.getMonth() + 1).toString().padStart(2, '0');
+      // month++;
 
       let fullDate = `${year}-${month}-${date}`;
       document.getElementById('dateInput').value = fullDate;
@@ -74,8 +57,10 @@
 
     function timeInput() {
       const oneHourBefore = new Date(d.getTime() + (1 * 60 * 60 * 1000));
+
       const hours = oneHourBefore.getHours().toString().padStart(2, '0');
       const minutes = oneHourBefore.getMinutes().toString().padStart(2, '0');
+
       const formattedTime = `${hours}:${minutes}`;
 
       document.getElementById('timeInput').value = formattedTime;
@@ -83,10 +68,13 @@
 
     timeInput();
 
+
     function startCountdown() {
       const time = document.getElementById('timeInput').value;
       const date = document.getElementById('dateInput').value;
+
       const targetDateTime = `${date}T${time}`;
+
 
       const countdownMsg = document.getElementById('countdownmsg').value;
       const isValid = validateDateTime(date, time);
@@ -99,6 +87,8 @@
       }
     }
 
+
+    //check validation
     function validateDateTime(date, time) {
       if (!date || !time) {
         return false;
@@ -113,27 +103,38 @@
       return true;
     }
 
+
+    //Error message
     function errorMsg(countdownMsg, isValid) {
       if (!countdownMsg) {
-        document.getElementById('errormsg_countdown').innerHTML = '**This is required';
+        document.getElementById('errormsg_countdown')
+          .innerHTML = '**This is required';
       } else {
-        document.getElementById('errormsg_countdown').innerHTML = '';
+        document.getElementById('errormsg_countdown')
+          .innerHTML = '';
       }
 
       if (!isValid) {
-        document.getElementById('errormsg_dateTime').innerHTML = '**Time only moves forward. Please try again';
+        document.getElementById('errormsg_dateTime')
+          .innerHTML = '**Time only moves forward. Please try again';
       } else {
-        document.getElementById('errormsg_dateTime').innerHTML = '';
+        document.getElementById('errormsg_dateTime')
+          .innerHTML = '';
       }
     }
 
     function hideErrorMsg() {
-      document.getElementById('errormsg_countdown').innerHTML = '';
-      document.getElementById('errormsg_dateTime').innerHTML = '';
+      document.getElementById('errormsg_countdown')
+        .innerHTML = '';
+      document.getElementById('errormsg_dateTime')
+        .innerHTML = '';
     }
 
+
+    //Redirect to new page
     function redirectNewPage(dateTime) {
       const countdownMsg = document.getElementById('countdownmsg').value;
+
       window.location.href = `countdown-next.html?targetDateTime=${(dateTime)}&countdownMsg=${(countdownMsg)}`;
     }
 
@@ -142,11 +143,12 @@
       if (countdownMsg) {
         hideErrorMsg();
       } else {
-        errorMsg(countdownMsg, true);
+        errorMsg(countdownMsg, true)
       }
     });
 
-    document.getElementById('timeInput').addEventListener('keyup', function () {
+
+    document.getElementById('timeInput').addEventListener('change', function () {
       const time = document.getElementById('timeInput').value;
       const date = document.getElementById('dateInput').value;
       const countdownMsg = document.getElementById('countdownmsg').value;
@@ -159,7 +161,7 @@
       }
     });
 
-    document.getElementById('dateInput').addEventListener('keyup', function () {
+    document.getElementById('dateInput').addEventListener('change', function () {
       const time = document.getElementById('timeInput').value;
       const date = document.getElementById('dateInput').value;
       const countdownMsg = document.getElementById('countdownmsg').value;
@@ -172,9 +174,8 @@
       }
     });
 
-    function goBack() {
-      window.history.back();
-    }
+
+
   </script>
 
 </body>
